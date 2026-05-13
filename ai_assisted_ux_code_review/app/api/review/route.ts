@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await grove.chat.completions.create({
-      model: process.env.GROVE_MODEL ?? 'gpt-5.5',
+      model: process.env.GROVE_MODEL ?? 'gpt-5.4',
       messages: [
         { role: 'system', content: REVIEW_SYSTEM_PROMPT },
         { role: 'user', content: userContent },
