@@ -67,6 +67,7 @@ export default function ReviewShell({ packs }: Props) {
       return;
     }
 
+    stopStepCycle();
     startStepCycle();
 
     const packNames = packs.packs
