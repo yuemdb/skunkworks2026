@@ -1,0 +1,42 @@
+{
+  "name": "ux-review-copilot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.2",
+    "@leafygreen-ui/badge": "latest",
+    "@leafygreen-ui/banner": "latest",
+    "@leafygreen-ui/button": "latest",
+    "@leafygreen-ui/card": "latest",
+    "@leafygreen-ui/checkbox": "latest",
+    "@leafygreen-ui/empty-state": "latest",
+    "@leafygreen-ui/leafygreen-provider": "latest",
+    "@leafygreen-ui/loading-indicator": "latest",
+    "@leafygreen-ui/tabs": "latest",
+    "@leafygreen-ui/text-area": "latest",
+    "@leafygreen-ui/text-input": "latest",
+    "@leafygreen-ui/typography": "latest",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "jest": "^29",
+    "jest-environment-jsdom": "^29",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
