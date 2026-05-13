@@ -1,9 +1,15 @@
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 import { NextRequest, NextResponse } from 'next/server';
 import { REVIEW_SYSTEM_PROMPT } from '@/lib/prompts';
 import type { ReviewRequestBody, ReviewResponse } from '@/lib/types';
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const grove = new OpenAI({
+  apiKey: 'dummy', // Azure API Management uses a custom header, not Bearer
+  baseURL: 'https://grove-gateway-prod.azure-api.net/grove-foundry-prod/openai/v1',
+  defaultHeaders: {
+    'api-key': process.env.GROVE_API_KEY ?? '',
+  },
+});
 
 export async function POST(req: NextRequest) {
   let body: ReviewRequestBody;
@@ -18,36 +24,39 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'userMessage is required' }, { status: 400 });
   }
 
-  const messageContent: Anthropic.MessageParam['content'] = [];
+  const userContent: OpenAI.ChatCompletionContentPart[] = [];
 
   for (const img of body.images ?? []) {
-    messageContent.push({
-      type: 'image',
-      source: {
-        type: 'base64',
-        media_type: img.media_type as 'image/png' | 'image/jpeg' | 'image/webp' | 'image/gif',
-        data: img.data,
-      },
+    userContent.push({
+      type: 'image_url',
+      image_url: { url: `data:${img.media_type};base64,${img.data}` },
     });
   }
 
-  messageContent.push({ type: 'text', text: body.userMessage });
+  userContent.push({ type: 'text', text: body.userMessage });
 
   try {
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 2000,
-      system: REVIEW_SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: messageContent }],
+    const response = await grove.chat.completions.create({
+      model: process.env.GROVE_MODEL ?? 'claude-sonnet-4-5',
+      messages: [
+        { role: 'system', content: REVIEW_SYSTEM_PROMPT },
+        { role: 'user', content: userContent },
+      ],
     });
 
-    const raw = response.content.map((b) => ('text' in b ? b.text : '')).join('');
-    const clean = raw.replace(/```json|```/g, '').trim();
+    const raw = response.choices[0]?.message?.content ?? '';
+    if (!raw) {
+      return NextResponse.json({ error: 'Empty response from model' }, { status: 500 });
+    }
+
+    const clean = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
     const review: ReviewResponse = JSON.parse(clean);
 
     return NextResponse.json(review);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    return NextResponse.json({ error: `Review failed: ${message}` }, { status: 500 });
+    const detail = (err as Record<string, unknown>)?.status ?? (err as Record<string, unknown>)?.code ?? '';
+    console.error('[review] LLM error:', message, detail, err);
+    return NextResponse.json({ error: `Review failed: ${message}`, detail }, { status: 502 });
   }
 }

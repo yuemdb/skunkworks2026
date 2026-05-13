@@ -1,10 +1,10 @@
 import { POST } from './route';
 import { NextRequest } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-jest.mock('@anthropic-ai/sdk');
+jest.mock('openai');
 
-const MockAnthropic = Anthropic as jest.MockedClass<typeof Anthropic>;
+const MockOpenAI = OpenAI as jest.MockedClass<typeof OpenAI>;
 
 const validReview = {
   summary: {
@@ -35,11 +35,13 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  MockAnthropic.prototype.messages = {
-    create: jest.fn().mockResolvedValue({
-      content: [{ type: 'text', text: JSON.stringify(validReview) }],
-    }),
-  } as unknown as typeof MockAnthropic.prototype.messages;
+  MockOpenAI.prototype.chat = {
+    completions: {
+      create: jest.fn().mockResolvedValue({
+        choices: [{ message: { content: JSON.stringify(validReview) } }],
+      }),
+    },
+  } as unknown as typeof MockOpenAI.prototype.chat;
 });
 
 test('returns structured review for valid request', async () => {
@@ -68,12 +70,12 @@ test('returns 400 when userMessage is missing', async () => {
   expect(res.status).toBe(400);
 });
 
-test('returns 500 when Anthropic throws', async () => {
-  (MockAnthropic.prototype.messages.create as jest.Mock).mockRejectedValueOnce(
+test('returns 502 when Grove throws', async () => {
+  (MockOpenAI.prototype.chat.completions.create as jest.Mock).mockRejectedValueOnce(
     new Error('API error')
   );
   const res = await POST(
     makeRequest({ userMessage: 'Figma URL: https://figma.com/test', images: [] })
   );
-  expect(res.status).toBe(500);
+  expect(res.status).toBe(502);
 });
