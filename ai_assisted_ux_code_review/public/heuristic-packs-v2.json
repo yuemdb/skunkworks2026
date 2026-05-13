@@ -1,0 +1,234 @@
+{
+  "schema_version": "2.0",
+  "schema_description": "Structured heuristic packs for the UX Review Copilot. Covers AI-generated and user-imported UI quality review. Each rule maps to an NNG heuristic, a severity default, a LeafyGreen recommendation, and a check_prompt for the AI reviewer.",
+
+  "packs": [
+
+    {
+      "pack_id": "core-ux",
+      "pack_name": "Core UX",
+      "description": "Fundamental UI completeness checks grounded in Jakob Nielsen's 10 Usability Heuristics. Catches missing states, broken flows, weak error handling, and recovery path gaps — the most common failures in AI-generated UI.",
+      "source": "https://www.nngroup.com/articles/ten-usability-heuristics/",
+      "priority_rules": ["core-ux-01", "core-ux-03", "core-ux-05", "core-ux-07"],
+      "rules": [
+        {
+          "rule_id": "core-ux-01",
+          "title": "Loading state present for async actions",
+          "nng_heuristic": "H1 — Visibility of System Status",
+          "nng_principle": "The design should always keep users informed about what is going on, through appropriate feedback within a reasonable amount of time.",
+          "severity_default": "Critical",
+          "check_prompt": "Is there a visible loading or pending state when an async action (form submit, data fetch, save) is triggered? Or does the UI appear frozen or unchanged?",
+          "leafygreen_component": "LoadingIndicator, Skeleton Loader, Progress Bar",
+          "leafygreen_url": "https://www.mongodb.design/component/loading-indicator/live-example"
+        },
+        {
+          "rule_id": "core-ux-02",
+          "title": "Empty state defined for zero-data views",
+          "nng_heuristic": "H1 — Visibility of System Status",
+          "nng_principle": "Users need to understand current system state, including when there is nothing to show.",
+          "severity_default": "Warning",
+          "check_prompt": "Does every list, table, or data view have an empty state for when no data exists? Does it explain why and provide a clear next action?",
+          "leafygreen_component": "Empty State",
+          "leafygreen_url": "https://www.mongodb.design/component/empty-state/live-example"
+        },
+        {
+          "rule_id": "core-ux-03",
+          "title": "Destructive actions require confirmation",
+          "nng_heuristic": "H5 — Error Prevention",
+          "nng_principle": "Prevent high-cost errors by presenting users with a confirmation option before they commit to an action.",
+          "severity_default": "Critical",
+          "check_prompt": "Do any destructive or irreversible actions (delete, remove, reset, overwrite) require a confirmation step before executing? Is the consequence clearly communicated?",
+          "leafygreen_component": "Confirmation Modal",
+          "leafygreen_url": "https://www.mongodb.design/component/confirmation-modal/live-example"
+        },
+        {
+          "rule_id": "core-ux-04",
+          "title": "Success feedback present and persistent enough to register",
+          "nng_heuristic": "H1 — Visibility of System Status",
+          "nng_principle": "Users need confirmation that their action completed successfully.",
+          "severity_default": "Warning",
+          "check_prompt": "Is there visible success feedback after a completed action (save, submit, send)? Is it persistent enough for the user to register it before it disappears?",
+          "leafygreen_component": "Toast (variant: success)",
+          "leafygreen_url": "https://www.mongodb.design/component/toast/live-example"
+        },
+        {
+          "rule_id": "core-ux-05",
+          "title": "Error state present with plain-language recovery guidance",
+          "nng_heuristic": "H9 — Help Users Recognize, Diagnose, and Recover from Errors",
+          "nng_principle": "Error messages should be expressed in plain language, precisely indicate the problem, and constructively suggest a solution.",
+          "severity_default": "Critical",
+          "check_prompt": "Are error states shown for failed actions or system errors? Do they explain what went wrong in plain language (no error codes) and provide a recovery path?",
+          "leafygreen_component": "Banner (variant: danger), Callout (variant: error), Toast (variant: warning)",
+          "leafygreen_url": "https://www.mongodb.design/component/banner/live-example"
+        },
+        {
+          "rule_id": "core-ux-06",
+          "title": "Cancel or undo path is clearly available",
+          "nng_heuristic": "H3 — User Control and Freedom",
+          "nng_principle": "Users often perform actions by mistake and need a clearly marked emergency exit without going through an extended process.",
+          "severity_default": "Warning",
+          "check_prompt": "Can users cancel in-progress actions or undo recent changes? Is the cancel/undo path clearly labeled and easily discoverable — not buried or absent?",
+          "leafygreen_component": "Form Footer (cancel action), Button (variant: default for Cancel)",
+          "leafygreen_url": "https://www.mongodb.design/component/form-footer/live-example"
+        },
+        {
+          "rule_id": "core-ux-07",
+          "title": "Incomplete flows have visible next-step guidance",
+          "nng_heuristic": "H10 — Help and Documentation",
+          "nng_principle": "When documentation is necessary, it should be focused on the user's task, presented in context, and list concrete steps.",
+          "severity_default": "Warning",
+          "check_prompt": "After completing a step in a multi-step flow, is the next step clearly communicated? Does the interface guide users forward, or does it leave them at a dead end?",
+          "leafygreen_component": "Stepper, Guide Cue, Info Sprinkle",
+          "leafygreen_url": "https://www.mongodb.design/component/stepper/live-example"
+        },
+        {
+          "rule_id": "core-ux-08",
+          "title": "Labels and terminology match user language",
+          "nng_heuristic": "H2 — Match Between System and Real World",
+          "nng_principle": "The design should speak the user's language using words, phrases, and concepts familiar to the user, not internal jargon.",
+          "severity_default": "Warning",
+          "check_prompt": "Are labels, button text, and section headings written in plain user-facing language? Are there cases of internal jargon, technical shorthand, or terminology inconsistency across the same flow?",
+          "leafygreen_component": "Inline Definition, Info Sprinkle for first-use terminology",
+          "leafygreen_url": "https://www.mongodb.design/component/inline-definition/live-example"
+        },
+        {
+          "rule_id": "core-ux-09",
+          "title": "UI noise is not competing with the primary task",
+          "nng_heuristic": "H8 — Aesthetic and Minimalist Design",
+          "nng_principle": "Every extra unit of information competes with relevant information and diminishes its relative visibility.",
+          "severity_default": "Suggestion",
+          "check_prompt": "Is there visible UI noise — secondary actions, decorative elements, or low-priority information — that competes with the primary task or goal of this screen?",
+          "leafygreen_component": "No specific component — refer to MongoDB minimalist design foundations",
+          "leafygreen_url": "https://www.mongodb.design/foundation/tokens"
+        }
+      ]
+    },
+
+    {
+      "pack_id": "accessibility",
+      "pack_name": "Accessibility",
+      "description": "Checks for accessible feedback patterns, semantic clarity, and non-color-only communication. Grounded in NNG heuristics and MongoDB accessibility foundations.",
+      "source": "https://www.mongodb.design/foundation/accessibility",
+      "rules": [
+        {
+          "rule_id": "a11y-01",
+          "title": "Status not communicated by color alone",
+          "nng_heuristic": "H1 — Visibility of System Status",
+          "nng_principle": "System status must be communicated through means accessible to all users.",
+          "severity_default": "Accessibility",
+          "check_prompt": "Does any status, error, or state change rely solely on color to communicate meaning? Is a secondary indicator (icon, label, or text) also present alongside the color change?",
+          "leafygreen_component": "Badge, Banner, Toast, Callout — all include icons alongside color by default in LeafyGreen",
+          "leafygreen_url": "https://www.mongodb.design/component/badge/live-example"
+        },
+        {
+          "rule_id": "a11y-02",
+          "title": "Interactive controls have visible descriptive labels",
+          "nng_heuristic": "H2 — Match Between System and Real World",
+          "nng_principle": "Labels should use words and concepts familiar to the user.",
+          "severity_default": "Accessibility",
+          "check_prompt": "Do all buttons, inputs, toggles, and interactive elements have clear visible labels? Are icon-only controls supplemented with tooltips or accessible names?",
+          "leafygreen_component": "Icon Button (requires aria-label), Tooltip for icon-only buttons",
+          "leafygreen_url": "https://www.mongodb.design/component/icon-button/live-example"
+        },
+        {
+          "rule_id": "a11y-03",
+          "title": "Focus order appears logical from visible structure",
+          "nng_heuristic": "H7 — Flexibility and Efficiency of Use",
+          "nng_principle": "Flexible processes should be accessible to users navigating without a mouse.",
+          "severity_default": "Accessibility",
+          "check_prompt": "From the visible UI structure, does the likely focus order appear logical (top-to-bottom, left-to-right, modal-trapped where appropriate)? Are any obvious focus traps or dead ends visible?",
+          "leafygreen_component": "All LeafyGreen interactive components include keyboard navigation support by default",
+          "leafygreen_url": "https://www.mongodb.design/foundation/accessibility"
+        },
+        {
+          "rule_id": "a11y-04",
+          "title": "Form fields have associated visible labels",
+          "nng_heuristic": "H6 — Recognition Rather Than Recall",
+          "nng_principle": "Information required to use the design should be visible or easily retrievable when needed.",
+          "severity_default": "Accessibility",
+          "check_prompt": "Do all form inputs have a visible label associated with them? Are placeholder-only fields present (which fail accessibility requirements when labels disappear on focus)?",
+          "leafygreen_component": "Text Input, Text Area, Select, Combobox — all include label slots in LeafyGreen",
+          "leafygreen_url": "https://www.mongodb.design/component/text-input/live-example"
+        }
+      ]
+    },
+
+    {
+      "pack_id": "mongodb-product",
+      "pack_name": "MongoDB Product",
+      "description": "Checks for LeafyGreen component alignment, MongoDB terminology consistency, and product pattern conventions. Use when reviewing MongoDB Atlas, Cloud Manager, or any internal MongoDB tooling.",
+      "source": "https://www.mongodb.design/",
+      "rules": [
+        {
+          "rule_id": "mdb-01",
+          "title": "Custom components used where LeafyGreen equivalent exists",
+          "nng_heuristic": "H4 — Consistency and Standards",
+          "nng_principle": "Follow platform and industry conventions to reduce cognitive load.",
+          "severity_default": "Warning",
+          "check_prompt": "Are any custom-designed UI components used where a LeafyGreen equivalent clearly exists? Flag reimplemented Toasts, Banners, Modals, Badges, Empty States, or form components.",
+          "leafygreen_component": "Refer to full component library at mongodb.design",
+          "leafygreen_url": "https://www.mongodb.design/"
+        },
+        {
+          "rule_id": "mdb-02",
+          "title": "MongoDB terminology used consistently",
+          "nng_heuristic": "H4 — Consistency and Standards",
+          "nng_principle": "Users should not have to wonder whether different words mean the same thing.",
+          "severity_default": "Warning",
+          "check_prompt": "Does the UI use MongoDB-standard terms (Project, Organization, Cluster, Atlas, etc.) consistently? Are there cases of inconsistent capitalization, mixed synonyms, or terminology that conflicts with the MongoDB product glossary?",
+          "leafygreen_component": "Inline Definition, Info Sprinkle for first-use or complex terms",
+          "leafygreen_url": "https://www.mongodb.design/component/inline-definition/live-example"
+        },
+        {
+          "rule_id": "mdb-03",
+          "title": "Navigation follows Cloud Nav Layout patterns",
+          "nng_heuristic": "H4 — Consistency and Standards",
+          "nng_principle": "Navigation structure should match platform conventions users have learned from the rest of the product.",
+          "severity_default": "Suggestion",
+          "check_prompt": "Does the navigation structure align with MongoDB's Cloud Nav Layout pattern? Are Side Nav and Section Nav components used for primary and secondary navigation rather than ad-hoc custom patterns?",
+          "leafygreen_component": "Cloud Nav Layout, Side Nav, Section Nav",
+          "leafygreen_url": "https://www.mongodb.design/component/cloud-nav-layout/live-example"
+        },
+        {
+          "rule_id": "mdb-04",
+          "title": "Copy follows MongoDB voice and tone",
+          "nng_heuristic": "H2 — Match Between System and Real World",
+          "nng_principle": "The design should speak the user's language using words and concepts familiar to the user.",
+          "severity_default": "Suggestion",
+          "check_prompt": "Does UI copy feel consistent with MongoDB's voice (clear, direct, human)? Are there overly technical error messages, passive constructions, vague CTAs ('Submit' instead of 'Create Cluster'), or tone inconsistencies?",
+          "leafygreen_component": "Refer to Copy: Voice and Tone guidelines",
+          "leafygreen_url": "https://www.mongodb.design/foundation/copy-voice-and-tone"
+        },
+        {
+          "rule_id": "mdb-05",
+          "title": "Empty and access restriction states use MongoDB patterns",
+          "nng_heuristic": "H10 — Help and Documentation",
+          "nng_principle": "Documentation should be focused on the user's task and presented in context.",
+          "severity_default": "Suggestion",
+          "check_prompt": "Are empty states and access restriction messages using MongoDB's dedicated patterns rather than custom treatments? Do they follow the MongoDB empty state structure (illustration, heading, description, CTA)?",
+          "leafygreen_component": "Empty State, Access Restriction Messages pattern, Feature Walls",
+          "leafygreen_url": "https://www.mongodb.design/component/empty-state/live-example"
+        }
+      ]
+    },
+
+    {
+      "pack_id": "team-custom",
+      "pack_name": "Team Custom",
+      "description": "Configurable pack for team-specific review rules. Copy this pack and define rules that reflect your team's design system expectations, workflow constraints, or product-specific heuristics. Rules defined here are injected into the review at runtime.",
+      "rules": [
+        {
+          "rule_id": "custom-template",
+          "title": "[Rule title — short and specific]",
+          "nng_heuristic": "[Optional: map to an NNG heuristic number and name]",
+          "nng_principle": "[Optional: quote or paraphrase the heuristic principle]",
+          "severity_default": "[Critical | Warning | Suggestion | Accessibility]",
+          "check_prompt": "[1–2 sentences describing exactly what the AI reviewer should look for or ask about in the artifact.]",
+          "leafygreen_component": "[Recommended LeafyGreen component, or 'None — custom pattern required' with reason]",
+          "leafygreen_url": "[Link to relevant component on mongodb.design, or omit if not applicable]"
+        }
+      ]
+    }
+
+  ]
+}
