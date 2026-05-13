@@ -7,7 +7,7 @@ export interface HeuristicRule {
   nng_principle?: string;
   severity_default: Severity;
   check_prompt: string;
-  leafygreen_component: string;
+  leafygreen_component?: string;
   leafygreen_url?: string;
 }
 
@@ -30,6 +30,11 @@ export interface HeuristicPacksData {
 
 export type Severity = 'Critical' | 'Warning' | 'Suggestion' | 'Accessibility';
 
+/**
+ * All context (URLs, feature intent, pack selection, custom rules) is pre-formatted
+ * into userMessage as a single string by the client. Images are passed separately as
+ * base64 because the Anthropic API requires them as distinct content blocks.
+ */
 export interface ReviewRequestBody {
   userMessage: string;
   images: Array<{

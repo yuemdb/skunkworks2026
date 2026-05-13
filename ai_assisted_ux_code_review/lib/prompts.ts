@@ -163,36 +163,6 @@ Apply rules provided by the user under "Team custom heuristics." If none provide
 
 ---
 
-## Output format
-
-### Review Summary
-- **Overall assessment:** 1–3 sentences.
-- **Primary risk themes:** 3–5 bullets.
-- **Packs applied:** list.
-
-### Critical
-- [Finding title]
-  - Why it matters:
-  - Recommendation: (LeafyGreen component name required when applicable)
-  - Evidence: (specific visible UI element)
-
-### Warning
-*(same structure)*
-
-### Suggestion
-*(same structure)*
-
-### Accessibility
-*(same structure)*
-
-### Open Questions
-*(only if genuine ambiguity prevents confident review — concrete, tied to missing context)*
-
-### Review Confidence
-High / Medium / Low — one sentence why.
-
----
-
 ## Hard constraints
 
 Never:
