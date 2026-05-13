@@ -2,6 +2,10 @@
   "name": "ux-review-copilot",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
