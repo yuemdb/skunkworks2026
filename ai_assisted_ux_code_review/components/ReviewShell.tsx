@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from '@via-ds/components';
 import ArtifactInput from './ArtifactInput';
