@@ -1,7 +1,6 @@
 'use client';
 
-import { Checkbox } from '@leafygreen-ui/checkbox';
-import { TextArea } from '@leafygreen-ui/text-area';
+import { Checkbox, TextArea } from '@via-ds/components';
 import type { HeuristicPack } from '@/lib/types';
 
 interface Props {
@@ -21,11 +20,11 @@ export default function PackSelector({
 }: Props) {
   const showCustomRules = selectedPackIds.includes('team-custom');
 
-  function toggle(packId: string) {
-    if (selectedPackIds.includes(packId)) {
-      onSelectionChange(selectedPackIds.filter((id) => id !== packId));
-    } else {
+  function toggle(packId: string, isSelected: boolean) {
+    if (isSelected) {
       onSelectionChange([...selectedPackIds, packId]);
+    } else {
+      onSelectionChange(selectedPackIds.filter((id) => id !== packId));
     }
   }
 
@@ -45,11 +44,11 @@ export default function PackSelector({
             }`}
           >
             <Checkbox
-              label={pack.pack_name}
-              checked={selectedPackIds.includes(pack.pack_id)}
-              onChange={() => toggle(pack.pack_id)}
-              bold
-            />
+              isSelected={selectedPackIds.includes(pack.pack_id)}
+              onChange={(isSelected) => toggle(pack.pack_id, isSelected)}
+            >
+              {pack.pack_name}
+            </Checkbox>
             <p className="text-xs text-gray-500 ml-6 leading-snug">{pack.description}</p>
           </label>
         ))}
@@ -60,8 +59,7 @@ export default function PackSelector({
             label="Custom heuristics"
             placeholder="Paste your team's custom review rules here…"
             value={customRules}
-            onChange={(e) => onCustomRulesChange(e.target.value)}
-            rows={3}
+            onChange={onCustomRulesChange}
           />
         </div>
       )}
