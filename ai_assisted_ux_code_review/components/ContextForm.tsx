@@ -1,7 +1,6 @@
 'use client';
 
-import { TextArea } from '@leafygreen-ui/text-area';
-import { TextInput } from '@leafygreen-ui/text-input';
+import { TextArea, TextField } from '@via-ds/components';
 
 interface Props {
   featureIntent: string;
@@ -27,21 +26,19 @@ export default function ContextForm({
         label="Feature intent"
         placeholder="What is this UI supposed to do?"
         value={featureIntent}
-        onChange={(e) => onFeatureIntentChange(e.target.value)}
-        rows={2}
+        onChange={onFeatureIntentChange}
       />
       <TextArea
         label="Workflow description"
         placeholder="Who uses it and how? Key flows?"
         value={workflow}
-        onChange={(e) => onWorkflowChange(e.target.value)}
-        rows={2}
+        onChange={onWorkflowChange}
       />
-      <TextInput
+      <TextField
         label="User roles"
         placeholder="e.g. Admin, read-only viewer, new user"
         value={userRoles}
-        onChange={(e) => onUserRolesChange(e.target.value)}
+        onChange={onUserRolesChange}
       />
     </section>
   );
