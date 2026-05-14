@@ -2,10 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import LGButton from '@leafygreen-ui/button';
-
-// Cast polymorphic LG component to satisfy React 19 JSX type constraints
-const Button = LGButton as React.ComponentType<any>;
+import { Button } from '@via-ds/components';
 import ArtifactInput from './ArtifactInput';
 import ContextForm from './ContextForm';
 import PackSelector from './PackSelector';
@@ -158,8 +155,8 @@ export default function ReviewShell({ packs }: Props) {
         <div className="p-6 mt-auto border-t border-gray-200">
           <Button
             variant="primary"
-            onClick={runReview}
-            disabled={isLoading}
+            onPress={runReview}
+            isDisabled={isLoading}
             className="w-full"
           >
             {isLoading ? 'Running review…' : '▶ Run Review'}
