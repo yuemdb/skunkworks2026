@@ -2,10 +2,6 @@
   "name": "ux-review-copilot",
   "version": "0.1.0",
   "private": true,
-  "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -26,6 +22,8 @@
     "@leafygreen-ui/text-area": "latest",
     "@leafygreen-ui/text-input": "latest",
     "@leafygreen-ui/typography": "latest",
+    "@via-ds/components": "^0.0.1-canary.0",
+    "@via-ds/tokens": "^0.0.1-canary.0",
     "next": "16.2.6",
     "openai": "^6.37.0",
     "react": "19.2.4",

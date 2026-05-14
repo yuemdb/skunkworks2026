@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@via-ds/components/index.css";
+@import "@via-ds/tokens/tailwind.css";
 
 body {
   background-color: #ffffff;
