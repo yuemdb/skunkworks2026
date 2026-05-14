@@ -78,7 +78,7 @@ export default function ReviewShell({ packs }: Props) {
     }
     if (!figmaUrl && !githubUrl && uploadedFiles.length === 0) {
       userMessage +=
-        '\n\nNote: No visual artifact provided — base review on feature intent and workflow, and flag this in Open Questions.';
+        '\n\nNote: No visual artifact provided — base review on the provided context, and flag missing information in Open Questions.';
     }
 
     const images: ReviewRequestBody['images'] = [];

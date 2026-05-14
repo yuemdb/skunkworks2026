@@ -13,7 +13,7 @@ export default function ContextForm({ context, onContextChange }: Props) {
       <p className="text-xs font-mono text-gray-400 uppercase tracking-widest">Context</p>
       <TextArea
         label="Design brief or PRfaq"
-        placeholder="Paste your PRfaq, design brief, or describe the feature intent, workflows, and user roles…"
+        placeholder="Paste your PRfaq or design brief — we'll extract intent, workflows, and user roles automatically"
         value={context}
         onChange={onContextChange}
       />
