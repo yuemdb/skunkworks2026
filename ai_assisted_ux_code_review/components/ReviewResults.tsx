@@ -1,15 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import { Banner } from '@leafygreen-ui/banner';
-import { Badge } from '@leafygreen-ui/badge';
-import { Body as LGBody } from '@leafygreen-ui/typography';
-import { BasicEmptyState } from '@leafygreen-ui/empty-state';
+import { Banner, Badge, Text } from '@via-ds/components';
 import FindingCard from './FindingCard';
 import LoadingState from './LoadingState';
 import type { ReviewState, Finding } from '@/lib/types';
-
-// Cast polymorphic LG components to satisfy React 19 JSX type constraints
-const Body = LGBody as React.ComponentType<any>;
 
 const SEVERITY_ORDER: Finding['severity'][] = ['Critical', 'Warning', 'Suggestion', 'Accessibility'];
 
@@ -20,11 +12,11 @@ interface Props {
 export default function ReviewResults({ state }: Props) {
   if (state.status === 'idle') {
     return (
-      <div className="flex items-center justify-center h-full p-16">
-        <BasicEmptyState
-          title="No review yet"
-          description="Submit a Figma prototype or GitHub URL to start a UX review."
-        />
+      <div className="flex flex-col items-center justify-center h-full p-16 text-center gap-3">
+        <Text textStyle="heading3" elementType="h2">No review yet</Text>
+        <Text textStyle="body" elementType="p">
+          Submit a Figma prototype or GitHub URL to start a UX review.
+        </Text>
       </div>
     );
   }
@@ -53,7 +45,7 @@ export default function ReviewResults({ state }: Props) {
     <div className="p-8 max-w-3xl">
       <div className="border border-gray-200 rounded-xl p-5 mb-8">
         <SummaryRow label="ASSESSMENT">
-          <Body>{summary.assessment}</Body>
+          <Text textStyle="body">{summary.assessment}</Text>
         </SummaryRow>
         <SummaryRow label="RISK THEMES">
           <span className="text-sm text-gray-600">{summary.risk_themes.join(' · ')}</span>
@@ -67,7 +59,15 @@ export default function ReviewResults({ state }: Props) {
         </SummaryRow>
         <SummaryRow label="CONFIDENCE">
           <div className="flex items-center gap-2">
-            <Badge variant={summary.confidence === 'High' ? 'blue' : summary.confidence === 'Medium' ? 'yellow' : 'red'}>
+            <Badge
+              variant={
+                summary.confidence === 'High'
+                  ? 'blue'
+                  : summary.confidence === 'Medium'
+                  ? 'yellow'
+                  : 'red'
+              }
+            >
               {summary.confidence}
             </Badge>
             <span className="text-xs text-gray-500">{summary.confidence_reason}</span>
@@ -95,7 +95,15 @@ export default function ReviewResults({ state }: Props) {
           <section key={sev} className="mb-8">
             <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-200">
               <Badge
-                variant={sev === 'Critical' ? 'red' : sev === 'Warning' ? 'yellow' : sev === 'Suggestion' ? 'blue' : 'darkgray'}
+                variant={
+                  sev === 'Critical'
+                    ? 'red'
+                    : sev === 'Warning'
+                    ? 'yellow'
+                    : sev === 'Suggestion'
+                    ? 'blue'
+                    : 'darkgray'
+                }
               >
                 {sev}
               </Badge>
