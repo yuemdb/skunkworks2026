@@ -22,7 +22,7 @@ File-by-file component swap. For each file, pull the exact Via component API fro
 
 ### `package.json`
 - **Add:** `@via-ds/components`, `@via-ds/icons`, `@via-ds/tokens`
-- **Remove:** all `@leafygreen-ui/*` packages
+- **Keep:** all `@leafygreen-ui/*` packages as fallback — Via is canary; LeafyGreen remains available if a Via component is missing or broken
 - **Remove:** npm `overrides` block (was needed to force LeafyGreen to use React 19 — Via should not have this conflict)
 
 ### `app/globals.css`
