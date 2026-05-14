@@ -27,9 +27,7 @@ export default function ReviewShell({ packs }: Props) {
   const [figmaUrl, setFigmaUrl] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [featureIntent, setFeatureIntent] = useState('');
-  const [workflow, setWorkflow] = useState('');
-  const [userRoles, setUserRoles] = useState('');
+  const [context, setContext] = useState('');
   const [selectedPacks, setSelectedPacks] = useState<string[]>(['core-ux', 'accessibility']);
   const [customRules, setCustomRules] = useState('');
   const stepIndexRef = useRef(0);
@@ -54,7 +52,7 @@ export default function ReviewShell({ packs }: Props) {
   }
 
   const runReview = useCallback(async () => {
-    const hasInput = figmaUrl || githubUrl || uploadedFiles.length > 0 || featureIntent || workflow;
+    const hasInput = figmaUrl || githubUrl || uploadedFiles.length > 0 || context;
     if (!hasInput) {
       setReviewState({
         status: 'error',
@@ -73,9 +71,7 @@ export default function ReviewShell({ packs }: Props) {
     let userMessage = '';
     if (figmaUrl) userMessage += `Figma prototype URL: ${figmaUrl}\n`;
     if (githubUrl) userMessage += `Preview URL: ${githubUrl}\n`;
-    if (featureIntent) userMessage += `\nFeature intent: ${featureIntent}`;
-    if (workflow) userMessage += `\nWorkflow description: ${workflow}`;
-    if (userRoles) userMessage += `\nUser roles: ${userRoles}`;
+    if (context) userMessage += `\n\nContext:\n${context}`;
     userMessage += `\n\nSelected heuristic packs: ${packNames.join(', ') || 'Core UX, Accessibility'}`;
     if (selectedPacks.includes('team-custom') && customRules) {
       userMessage += `\n\nTeam custom heuristics:\n${customRules}`;
@@ -113,7 +109,7 @@ export default function ReviewShell({ packs }: Props) {
       const message = err instanceof Error ? err.message : 'Network error';
       setReviewState({ status: 'error', message });
     }
-  }, [figmaUrl, githubUrl, uploadedFiles, featureIntent, workflow, userRoles, selectedPacks, customRules, packs]);
+  }, [figmaUrl, githubUrl, uploadedFiles, context, selectedPacks, customRules, packs]);
 
   // Cleanup interval on unmount
   useEffect(() => () => stopStepCycle(), []);
@@ -137,12 +133,8 @@ export default function ReviewShell({ packs }: Props) {
           onFilesChange={setUploadedFiles}
         />
         <ContextForm
-          featureIntent={featureIntent}
-          onFeatureIntentChange={setFeatureIntent}
-          workflow={workflow}
-          onWorkflowChange={setWorkflow}
-          userRoles={userRoles}
-          onUserRolesChange={setUserRoles}
+          context={context}
+          onContextChange={setContext}
         />
         <PackSelector
           packs={packs.packs}

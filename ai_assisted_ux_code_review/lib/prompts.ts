@@ -46,9 +46,7 @@ Users may submit any combination of:
 - GitHub preview URL or deployed prototype URL (fetch and analyze the live UI)
 - Uploaded screenshots
 - Text description of the UI
-- Feature intent
-- Workflow description
-- User roles
+- **Context (optional):** Raw design brief, PRfaq, or free-form text. Extract feature intent, user goals, workflows, and user roles from this when present.
 - Selected heuristic packs
 - Team custom heuristics
 
