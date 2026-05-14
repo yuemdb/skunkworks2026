@@ -1,6 +1,6 @@
-import { Spinner } from '@leafygreen-ui/loading-indicator';
+import { ProgressBar } from '@via-ds/components';
 
-const STEPS = [
+export const STEPS = [
   'Reading artifact structure…',
   'Identifying states and transitions…',
   'Checking heuristic packs…',
@@ -16,7 +16,7 @@ interface Props {
 export default function LoadingState({ step }: Props) {
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 p-16 text-center">
-      <Spinner />
+      <ProgressBar label="Analyzing artifact" isIndeterminate className="w-48" />
       <p className="font-mono text-xs text-gray-400 uppercase tracking-widest">
         Analyzing artifact
       </p>
@@ -24,5 +24,3 @@ export default function LoadingState({ step }: Props) {
     </div>
   );
 }
-
-export { STEPS };
