@@ -1,14 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import { Card as LGCard } from '@leafygreen-ui/card';
-import { Badge } from '@leafygreen-ui/badge';
-import { InlineCode as LGInlineCode, Body as LGBody } from '@leafygreen-ui/typography';
+import { Card, Badge, Text } from '@via-ds/components';
 import type { Finding } from '@/lib/types';
-
-// Cast polymorphic LG components to satisfy React 19 JSX type constraints
-const Card = LGCard as React.ComponentType<any>;
-const Body = LGBody as React.ComponentType<any>;
-const InlineCode = LGInlineCode as React.ComponentType<any>;
 
 const BADGE_VARIANT: Record<Finding['severity'], 'red' | 'yellow' | 'blue' | 'darkgray'> = {
   Critical: 'red',
@@ -26,7 +17,7 @@ export default function FindingCard({ finding }: Props) {
     <Card className="mb-2">
       <div className="flex items-start gap-3 mb-3">
         <Badge variant={BADGE_VARIANT[finding.severity]}>{finding.severity}</Badge>
-        <Body weight="medium">{finding.title}</Body>
+        <Text textStyle="body" elementType="span">{finding.title}</Text>
       </div>
       <dl className="flex flex-col gap-2">
         <FindingRow label="WHY">{finding.why}</FindingRow>
@@ -56,7 +47,7 @@ function RecommendationText({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         part.startsWith('LeafyGreen') ? (
-          <InlineCode key={i}>{part.trim()}</InlineCode>
+          <Text key={i} textStyle="inlineCode" elementType="code">{part.trim()}</Text>
         ) : (
           <span key={i}>{part}</span>
         )
