@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import '@via-ds/components/index.css';
+@import "tailwindcss";
+
+@theme {
+  --color-lg-base: #001E2B;
+  --color-lg-surface: #0D2535;
+  --color-lg-card: #112733;
+  --color-lg-border: #1F3342;
+  --color-lg-text: #E3EEF3;
+  --color-lg-muted: #89979B;
+  --color-lg-faint: #3D5A68;
+  --color-lg-green: #00ED64;
+  --color-lg-green-dark: #00A35C;
+  --color-lg-amber: #FFC010;
+  --color-lg-red: #CF4A22;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
+
+:root,
+body {
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #001E2B;
+  color: #E3EEF3;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* React Aria portals (Popover, Dialog, etc.) render into document.body as siblings
+   of the ViaProvider root div, so they don't inherit --lightningcss-light/dark variables
+   that Via's color-scheme system uses (LightningCSS polyfill for light-dark()).
+   Mirror the .colorScheme-module_dark class here to force dark values in overlays. */
+.react-aria-Popover {
+  --lightningcss-light: ;
+  --lightningcss-dark: initial;
+  color-scheme: dark;
+}
