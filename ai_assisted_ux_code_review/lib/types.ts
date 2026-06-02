@@ -33,7 +33,10 @@ export type Severity = 'Critical' | 'Warning' | 'Suggestion' | 'Accessibility';
 /**
  * All context (URLs, feature intent, pack selection, custom rules) is pre-formatted
  * into userMessage as a single string by the client. Images are passed separately as
- * base64 because the Anthropic API requires them as distinct content blocks.
+ * base64 because the model API requires them as distinct content blocks.
+ *
+ * figmaUrl: when present, the server fetches the Figma node screenshot + structure
+ * and injects them into the LLM request before the userMessage.
  */
 export interface ReviewRequestBody {
   userMessage: string;
@@ -41,6 +44,8 @@ export interface ReviewRequestBody {
     media_type: string;
     data: string;
   }>;
+  /** Optional Figma design/proto URL. Server fetches actual design context if set. */
+  figmaUrl?: string;
 }
 
 export interface Finding {

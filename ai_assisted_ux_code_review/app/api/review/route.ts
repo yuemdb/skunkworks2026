@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { NextRequest, NextResponse } from 'next/server';
 import { REVIEW_SYSTEM_PROMPT } from '@/lib/prompts';
+import { fetchFigmaContext, parseFigmaUrl } from '@/lib/figma';
 import type { ReviewRequestBody, ReviewResponse } from '@/lib/types';
 
 const grove = new OpenAI({
@@ -24,16 +25,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'userMessage is required' }, { status: 400 });
   }
 
+  // ── Figma: fetch design context server-side if a Figma URL was provided ──
+  let figmaContextText = '';
+  const figmaImages: ReviewRequestBody['images'] = [];
+
+  if (body.figmaUrl && parseFigmaUrl(body.figmaUrl)) {
+    const token = process.env.FIGMA_ACCESS_TOKEN ?? '';
+    if (!token) {
+      console.warn('[review] FIGMA_ACCESS_TOKEN not set — skipping Figma fetch');
+    } else {
+      try {
+        const { contextText, images } = await fetchFigmaContext(body.figmaUrl, token);
+        figmaContextText = contextText;
+        figmaImages.push(...images);
+        console.log(`[review] Fetched Figma context: ${images.length} screenshot(s)`);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn('[review] Figma fetch failed:', msg);
+        // Surface it in the prompt so the LLM knows the design fetch failed
+        figmaContextText = `[Figma design could not be fetched: ${msg}]`;
+      }
+    }
+  }
+
+  // Prepend Figma context to the user message when present
+  const fullUserMessage = figmaContextText
+    ? `Figma Design Context:\n${figmaContextText}\n\n---\n\n${body.userMessage}`
+    : body.userMessage;
+
+  // Figma screenshots come first so the model sees the design before reading text
   const userContent: OpenAI.ChatCompletionContentPart[] = [];
 
-  for (const img of body.images ?? []) {
+  for (const img of [...figmaImages, ...(body.images ?? [])]) {
     userContent.push({
       type: 'image_url',
       image_url: { url: `data:${img.media_type};base64,${img.data}` },
     });
   }
 
-  userContent.push({ type: 'text', text: body.userMessage });
+  userContent.push({ type: 'text', text: fullUserMessage });
 
   try {
     const response = await grove.chat.completions.create({

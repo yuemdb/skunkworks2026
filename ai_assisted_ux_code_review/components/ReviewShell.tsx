@@ -91,7 +91,11 @@ export default function ReviewShell({ packs }: Props) {
       const res = await fetch('/api/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userMessage, images } satisfies ReviewRequestBody),
+        body: JSON.stringify({
+          userMessage,
+          images,
+          figmaUrl: figmaUrl.trim() || undefined,
+        } satisfies ReviewRequestBody),
       });
 
       stopStepCycle();
